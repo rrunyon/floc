@@ -6,10 +6,16 @@ defmodule FlocWeb.PageController do
   end
 
   def fetch_quote() do
-    {:ok, response} = HTTPoison.get "https://zenquotes.io/api/quotes"
-    {:ok, parsed} = response.body |> Jason.decode
-    [head | tail] = parsed
+    case Cachex.get!(:cache, "quote") do
+      nil ->
+        {:ok, response} = HTTPoison.get "https://zenquotes.io/api/quotes"
+        {:ok, parsed} = response.body |> Jason.decode
+        [head | _tail] = parsed
 
-    %{text: head["q"], author: head["a"]}
+        Cachex.put(:cache, "quote", %{text: head["q"], author: head["a"]}, ttl: 5000)
+      _ ->
+    end
+
+    Cachex.get!(:cache, "quote")
   end
 end

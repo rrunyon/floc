@@ -15,9 +15,10 @@ defmodule Floc.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Floc.PubSub},
       # Start the Endpoint (http/https)
-      FlocWeb.Endpoint
+      FlocWeb.Endpoint,
       # Start a worker by calling: Floc.Worker.start_link(arg)
       # {Floc.Worker, arg}
+      {Cachex, name: :cache}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
