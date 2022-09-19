@@ -53,11 +53,11 @@ CREATE TABLE public.schema_migrations (
 
 CREATE TABLE public.seasons (
     id uuid NOT NULL,
-    year integer NOT NULL,
-    first_place_id uuid NOT NULL,
-    second_place_id uuid NOT NULL,
-    third_place_id uuid NOT NULL,
-    last_place_id uuid NOT NULL,
+    year character varying(255) NOT NULL,
+    first_place_id uuid,
+    second_place_id uuid,
+    third_place_id uuid,
+    last_place_id uuid,
     buy_in integer,
     payouts integer[],
     inserted_at timestamp(0) without time zone NOT NULL,
@@ -72,7 +72,9 @@ CREATE TABLE public.seasons (
 CREATE TABLE public.teams (
     id uuid NOT NULL,
     espn_raw jsonb NOT NULL,
+    espn_id character varying(255) NOT NULL,
     user_id uuid,
+    season_id uuid,
     name character varying(255),
     avatar_url character varying(255),
     inserted_at timestamp(0) without time zone NOT NULL,
@@ -87,6 +89,7 @@ CREATE TABLE public.teams (
 CREATE TABLE public.users (
     id uuid NOT NULL,
     espn_raw jsonb NOT NULL,
+    espn_id character varying(255) NOT NULL,
     first_name character varying(255),
     last_name character varying(255),
     email character varying(255),
@@ -102,6 +105,7 @@ CREATE TABLE public.users (
 CREATE TABLE public.weeks (
     id uuid NOT NULL,
     season_id uuid NOT NULL,
+    week integer NOT NULL,
     playoff boolean DEFAULT false NOT NULL,
     recap text,
     inserted_at timestamp(0) without time zone NOT NULL,
@@ -186,6 +190,13 @@ CREATE INDEX matchups_week_id_index ON public.matchups USING btree (week_id);
 
 
 --
+-- Name: matchups_week_id_season_id_home_team_id_away_team_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX matchups_week_id_season_id_home_team_id_away_team_id_index ON public.matchups USING btree (week_id, season_id, home_team_id, away_team_id);
+
+
+--
 -- Name: seasons_first_place_id_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -214,17 +225,31 @@ CREATE INDEX seasons_third_place_id_index ON public.seasons USING btree (third_p
 
 
 --
--- Name: teams_user_id_index; Type: INDEX; Schema: public; Owner: -
+-- Name: seasons_year_index; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX teams_user_id_index ON public.teams USING btree (user_id);
+CREATE UNIQUE INDEX seasons_year_index ON public.seasons USING btree (year);
 
 
 --
--- Name: weeks_season_id_index; Type: INDEX; Schema: public; Owner: -
+-- Name: teams_user_id_season_id_index; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX weeks_season_id_index ON public.weeks USING btree (season_id);
+CREATE UNIQUE INDEX teams_user_id_season_id_index ON public.teams USING btree (user_id, season_id);
+
+
+--
+-- Name: users_espn_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX users_espn_id_index ON public.users USING btree (espn_id);
+
+
+--
+-- Name: weeks_season_id_week_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX weeks_season_id_week_index ON public.weeks USING btree (season_id, week);
 
 
 --
@@ -289,6 +314,14 @@ ALTER TABLE ONLY public.seasons
 
 ALTER TABLE ONLY public.seasons
     ADD CONSTRAINT seasons_third_place_id_fkey FOREIGN KEY (third_place_id) REFERENCES public.users(id);
+
+
+--
+-- Name: teams teams_season_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.teams
+    ADD CONSTRAINT teams_season_id_fkey FOREIGN KEY (season_id) REFERENCES public.seasons(id);
 
 
 --

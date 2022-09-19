@@ -11,7 +11,7 @@ config :floc,
   ecto_repos: [Floc.Repo]
 
 config :floc, Floc.Repo,
-  migration_primary_key: [name: :id, type: :uuid]
+  migration_primary_key: [type: :uuid]
 
 # Configures the endpoint
 config :floc, FlocWeb.Endpoint,
