@@ -10,6 +10,9 @@ import Config
 config :floc,
   ecto_repos: [Floc.Repo]
 
+config :floc, Floc.Repo,
+  migration_primary_key: [name: :id, type: :uuid]
+
 # Configures the endpoint
 config :floc, FlocWeb.Endpoint,
   url: [host: "localhost"],
