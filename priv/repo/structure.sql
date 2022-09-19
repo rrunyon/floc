@@ -24,12 +24,14 @@ SET default_tablespace = '';
 
 CREATE TABLE public.matchups (
     id uuid NOT NULL,
-    week_id uuid NOT NULL,
-    season_id uuid NOT NULL,
-    home_team_id uuid NOT NULL,
-    away_team_id uuid NOT NULL,
-    score character varying(255) NOT NULL,
-    playoff boolean DEFAULT false NOT NULL,
+    espn_raw jsonb NOT NULL,
+    week_id uuid,
+    season_id uuid,
+    home_team_id uuid,
+    away_team_id uuid,
+    home_score character varying(255) NOT NULL,
+    away_score character varying(255) NOT NULL,
+    playoff_tier_type character varying(255) NOT NULL,
     inserted_at timestamp(0) without time zone NOT NULL,
     updated_at timestamp(0) without time zone NOT NULL
 );
@@ -69,9 +71,10 @@ CREATE TABLE public.seasons (
 
 CREATE TABLE public.teams (
     id uuid NOT NULL,
-    user_id uuid NOT NULL,
-    name character varying(255) NOT NULL,
-    avatar_url character varying(255) NOT NULL,
+    espn_raw jsonb NOT NULL,
+    user_id uuid,
+    name character varying(255),
+    avatar_url character varying(255),
     inserted_at timestamp(0) without time zone NOT NULL,
     updated_at timestamp(0) without time zone NOT NULL
 );
@@ -83,8 +86,10 @@ CREATE TABLE public.teams (
 
 CREATE TABLE public.users (
     id uuid NOT NULL,
-    name character varying(255) NOT NULL,
-    email character varying(255) NOT NULL,
+    espn_raw jsonb NOT NULL,
+    first_name character varying(255),
+    last_name character varying(255),
+    email character varying(255),
     inserted_at timestamp(0) without time zone NOT NULL,
     updated_at timestamp(0) without time zone NOT NULL
 );

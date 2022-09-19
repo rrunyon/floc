@@ -3,16 +3,21 @@ defmodule Floc.Repo.Migrations.CreateTables do
 
   def change do
     create table(:users) do
-      add :name, :string, null: false
-      add :email, :string, null: false
+      add :espn_raw, :jsonb, null: false
+
+      add :first_name, :string
+      add :last_name, :string
+      add :email, :string
 
       timestamps()
     end
 
     create table(:teams) do
-      add :user_id, references(:users, on_delete: :nothing), null: false
-      add :name, :string, null: false
-      add :avatar_url, :string, null: false
+      add :espn_raw, :jsonb, null: false
+
+      add :user_id, references(:users)
+      add :name, :string
+      add :avatar_url, :string
 
       timestamps()
     end
@@ -47,12 +52,15 @@ defmodule Floc.Repo.Migrations.CreateTables do
     create index(:weeks, [:season_id])
 
     create table(:matchups) do
-      add :week_id, references(:weeks), null: false
-      add :season_id, references(:seasons), null: false
-      add :home_team_id, references(:teams), null: false
-      add :away_team_id, references(:teams), null: false
-      add :score, :string, null: false
-      add :playoff, :boolean, null: false, default: false
+      add :espn_raw, :jsonb, null: false
+
+      add :week_id, references(:weeks)
+      add :season_id, references(:seasons)
+      add :home_team_id, references(:teams)
+      add :away_team_id, references(:teams)
+      add :home_score, :string, null: false
+      add :away_score, :string, null: false
+      add :playoff_tier_type, :string, null: false
 
       timestamps()
     end

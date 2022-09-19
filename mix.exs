@@ -49,7 +49,8 @@ defmodule Floc.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:httpoison, "~> 1.8"},
-      {:cachex, "~> 3.4"}
+      {:cachex, "~> 3.4"},
+      {:memoize, "~> 1.4"}
     ]
   end
 
