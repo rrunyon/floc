@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.20
--- Dumped by pg_dump version 14.2
+-- Dumped from database version 14.4
+-- Dumped by pg_dump version 14.5 (Homebrew)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -17,6 +17,8 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 SET default_tablespace = '';
+
+SET default_table_access_method = heap;
 
 --
 -- Name: matchups; Type: TABLE; Schema: public; Owner: -

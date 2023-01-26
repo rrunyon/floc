@@ -2,7 +2,7 @@ defmodule FlocWeb.PageController do
   use FlocWeb, :controller
 
   def index(conn, _params) do
-    render(conn, "index.html", quote: fetch_quote())
+    render(conn, "index.html", quote: nil)
   end
 
   def fetch_quote() do
